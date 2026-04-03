@@ -42,7 +42,7 @@ where Transition: TextTransition {
                 )
                 transition.body(context: &copy, progress: staggeredProgress)
             }
-            copy.draw(slice)
+            copy.draw(slice, options: .disablesSubpixelQuantization)
         }
     }
 

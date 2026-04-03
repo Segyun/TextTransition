@@ -12,8 +12,10 @@ where Transition: TextTransition, Value: StringProtocol & Equatable {
     private let transition: Transition
     private let value: Value
 
+    @State private var displayedValue: String = ""
     @State private var stablePrefixCharacterCount: Int = 0
     @State private var animationProgress: Double = 1.0
+    @State private var pendingAnimationTask: Task<Void, Never>?
 
     init(
         transition: Transition,
@@ -29,31 +31,63 @@ where Transition: TextTransition, Value: StringProtocol & Equatable {
                 TextTransitionRenderer(
                     transition,
                     stablePrefixCharacterCount: stablePrefixCharacterCount,
-                    totalCharacterCount: value.count,
+                    totalCharacterCount: displayedValue.count,
                     progress: animationProgress
                 )
             )
+            .background {
+                TextTransitionTransactionObserver(value: String(value)) { newValue, isAnimated in
+                    handleValueChange(to: newValue, isAnimated: isAnimated)
+                }
+                .frame(width: 0, height: 0)
+            }
             .onAppear {
-                stablePrefixCharacterCount = value.count
+                pendingAnimationTask?.cancel()
+                displayedValue = String(value)
+                stablePrefixCharacterCount = displayedValue.count
                 animationProgress = 1.0
             }
-            .onChange(of: value, initial: false) { oldValue, newValue in
-                stablePrefixCharacterCount = commonPrefixCount(
-                    from: oldValue,
-                    to: newValue
-                )
-                animationProgress = 0.0
-
-                withAnimation(.linear) {
-                    animationProgress = 1.0
-                }
+            .onDisappear {
+                pendingAnimationTask?.cancel()
+                pendingAnimationTask = nil
             }
     }
 
-    private func commonPrefixCount(
-        from oldValue: Value,
-        to newValue: Value
-    ) -> Int {
+    @MainActor
+    private func handleValueChange(to newValue: String, isAnimated: Bool) {
+        guard displayedValue != newValue else { return }
+
+        guard isAnimated else {
+            pendingAnimationTask?.cancel()
+            pendingAnimationTask = nil
+            displayedValue = newValue
+            stablePrefixCharacterCount = displayedValue.count
+            animationProgress = 1.0
+            return
+        }
+
+        pendingAnimationTask?.cancel()
+        pendingAnimationTask = nil
+
+        stablePrefixCharacterCount = commonPrefixCount(from: displayedValue, to: newValue)
+        displayedValue = newValue
+        animationProgress = 0.0
+
+        pendingAnimationTask = Task { @MainActor in
+            await Task.yield()
+            guard Task.isCancelled == false else { return }
+
+            withAnimation(.linear(duration: animationDuration)) {
+                animationProgress = 1.0
+            }
+
+            pendingAnimationTask = nil
+        }
+    }
+
+    private func commonPrefixCount(from oldValue: String, to newValue: String) -> Int {
         zip(oldValue, newValue).prefix { $0 == $1 }.count
     }
+
+    private var animationDuration: Double { 0.5 }
 }
