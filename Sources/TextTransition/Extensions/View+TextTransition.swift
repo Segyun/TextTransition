@@ -8,6 +8,7 @@
 import SwiftUI
 
 extension View {
+    /// Animates text changes for a plain string value.
     public func textTransition(
         _ transition: some TextTransition,
         value: some StringProtocol
@@ -21,6 +22,7 @@ extension View {
             )
     }
 
+    /// Animates text changes for a localized string resource.
     public func textTransition(
         _ transition: some TextTransition,
         resource: LocalizedStringResource
@@ -34,6 +36,7 @@ extension View {
             )
     }
 
+    /// Animates text changes for a formatted value.
     public func textTransition<Format>(
         _ transition: some TextTransition,
         input: Format.FormatInput,

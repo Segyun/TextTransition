@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// A transition that fades newly inserted text in.
 public struct OpacityTextTransition: TextTransition {
     public init() {}
 
@@ -16,5 +17,6 @@ public struct OpacityTextTransition: TextTransition {
 }
 
 extension TextTransition where Self == OpacityTextTransition {
+    /// An opacity transition with the default fade behavior.
     public static var opacity: Self { .init() }
 }

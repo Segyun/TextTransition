@@ -7,9 +7,11 @@
 
 import SwiftUI
 
+/// A transition that animates newly inserted text from an offset position.
 public struct OffsetTextTransition: TextTransition {
     private let offset: CGSize
 
+    /// Creates an offset transition with the provided displacement.
     public init(offset: CGSize) {
         self.offset = offset
     }
@@ -23,10 +25,12 @@ public struct OffsetTextTransition: TextTransition {
 }
 
 extension TextTransition where Self == OffsetTextTransition {
+    /// An offset transition created from horizontal and vertical components.
     public static func offset(x: CGFloat, y: CGFloat) -> Self {
         .init(offset: .init(width: x, height: y))
     }
 
+    /// An offset transition created from a `CGSize` value.
     public static func offset(_ offset: CGSize) -> Self {
         .init(offset: offset)
     }

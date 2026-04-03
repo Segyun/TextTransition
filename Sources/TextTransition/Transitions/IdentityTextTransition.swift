@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// A transition that leaves the text unchanged.
 public struct IdentityTextTransition: TextTransition {
     public init() {}
 
@@ -14,5 +15,6 @@ public struct IdentityTextTransition: TextTransition {
 }
 
 extension TextTransition where Self == IdentityTextTransition {
+    /// A transition that performs no visual effect.
     public static var identity: Self { .init() }
 }

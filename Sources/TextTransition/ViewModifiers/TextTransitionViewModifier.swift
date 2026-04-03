@@ -74,6 +74,8 @@ where Transition: TextTransition, Value: StringProtocol & Equatable {
         animationProgress = 0.0
 
         pendingAnimationTask = Task { @MainActor in
+            // Start the explicit linear animation on the next run loop so SwiftUI
+            // can commit the reset progress before interpolating to the final value.
             await Task.yield()
             guard Task.isCancelled == false else { return }
 

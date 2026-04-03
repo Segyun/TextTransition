@@ -21,6 +21,7 @@ where Transition: TextTransition {
     }
 
     func body(context: inout GraphicsContext, progress: Double) {
+        // Apply an optional timing curve before forwarding progress to the wrapped transition.
         let animatedProgress: Double = animation?.value(at: progress) ?? 1.0
         transition.body(context: &context, progress: animatedProgress)
     }

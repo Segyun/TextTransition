@@ -7,11 +7,13 @@
 
 import SwiftUI
 
+/// A transition that applies multiple text transitions in sequence.
 public struct CombiningTextTransition<each Transition: TextTransition>:
     TextTransition
 {
     private let transitions: (repeat each Transition)
 
+    /// Creates a transition that combines the provided transitions in declaration order.
     public init(_ transitions: repeat each Transition) {
         self.transitions = (repeat each transitions)
     }
