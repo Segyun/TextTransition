@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct FilteredTextTransition<Transition>: TextTransition
+public struct FilteredTextTransition<Transition>: TextTransition
 where Transition: TextTransition {
     let animation: UnitCurve?
     private let transition: Transition
