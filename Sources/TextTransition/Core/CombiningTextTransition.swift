@@ -13,8 +13,7 @@ public struct CombiningTextTransition<each Transition: TextTransition>:
 {
     private let transitions: (repeat each Transition)
 
-    /// Creates a transition that combines the provided transitions in declaration order.
-    public init(_ transitions: repeat each Transition) {
+    internal init(_ transitions: repeat each Transition) {
         self.transitions = (repeat each transitions)
     }
 

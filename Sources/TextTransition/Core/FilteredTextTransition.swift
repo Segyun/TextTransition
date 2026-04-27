@@ -12,7 +12,7 @@ where Transition: TextTransition {
     let animation: UnitCurve?
     private let transition: Transition
 
-    init(
+    internal init(
         animation: UnitCurve?,
         transition: Transition
     ) {
@@ -20,7 +20,7 @@ where Transition: TextTransition {
         self.transition = transition
     }
 
-    func body(context: inout GraphicsContext, progress: Double) {
+    public func body(context: inout GraphicsContext, progress: Double) {
         // Apply an optional timing curve before forwarding progress to the wrapped transition.
         let animatedProgress: Double = animation?.value(at: progress) ?? 1.0
         transition.body(context: &context, progress: animatedProgress)
