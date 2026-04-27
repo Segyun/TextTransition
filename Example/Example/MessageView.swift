@@ -58,7 +58,7 @@ struct MessageView: View {
                         .offset(x: 0, y: 8)
                             .combined(with: .blur)
                             .combined(with: .opacity),
-                        value: message.content
+                        value: content
                     )
             }
         }

@@ -22,6 +22,20 @@ extension View {
             )
     }
 
+    /// Animates text changes for a attributed string value.
+    public func textTransition(
+        _ transition: some TextTransition,
+        value: AttributedString
+    ) -> some View {
+        self
+            .modifier(
+                TextTransitionViewModifier(
+                    transition: transition,
+                    value: String(value.characters)
+                )
+            )
+    }
+
     /// Animates text changes for a localized string resource.
     public func textTransition(
         _ transition: some TextTransition,
